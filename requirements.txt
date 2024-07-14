@@ -1,0 +1,16 @@
+Flask
+flask-cors
+gunicorn
+pandas
+scikit-learn
+numpy
+matplotlib
+Pillow
+opencv-python-headless
+keras
+tensorflow
+fastapi
+uvicorn
+pybase64
+typing
+pydantic
