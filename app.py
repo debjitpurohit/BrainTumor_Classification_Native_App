@@ -18,12 +18,12 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # model = pickle.load(open("brain_tumor_model.pkl", "rb"))
-json_file = open('braintumormodel.json', 'r')
+json_file = open('./braintumormodel.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
 # load weights into new model
-loaded_model.load_weights("braintumor.h5")
+loaded_model.load_weights("./braintumor.h5")
 
 
 def get_cv2_image_from_base64_string(b64str):
