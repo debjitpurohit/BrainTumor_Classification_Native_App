@@ -7,6 +7,7 @@ import pandas as pd
 import cv2
 import pickle
 import base64
+import os
 from io import BytesIO
 from PIL import Image
 from typing import List
@@ -23,13 +24,42 @@ cors = CORS(app, resource={
 app.config['CORS_HEADERS'] = 'Content-Type'
 ######################################################################
 # model = pickle.load(open("brain_tumor_model.pkl", "rb"))
-json_file = open('./braintumormodel.json', 'r')
+# json_file = open('./braintumormodel.json', 'r')
 # loaded_model_json = json_file.read()
 # json_file.close()
-loaded_model = model_from_json(json_file.read())
-# load weights into new model
+# loaded_model = model_from_json(loded_model_json)
+# # load weights into new model
 # loaded_model.load_weights("./braintumor.h5")
+
 ######################################################################
+json_path = './braintumormodel.json'
+weights_path = './braintumor.h5'
+
+if not os.path.exists(json_path):
+    raise FileNotFoundError(f"JSON file not found: {json_path}")
+
+if not os.path.exists(weights_path):
+    raise FileNotFoundError(f"H5 file not found: {weights_path}")
+
+# Load JSON and create model
+with open(json_path, 'r') as json_file:
+    loaded_model_json = json_file.read()
+
+# Check if JSON content is not empty
+if not loaded_model_json:
+    raise ValueError("The JSON file is empty or could not be read properly.")
+
+# Create the model from JSON
+loaded_model = model_from_json(loaded_model_json)
+
+# Load weights into the new model
+loaded_model.load_weights(weights_path)
+
+print("Model loaded successfully.")
+
+
+
+####################################################################
 
 def get_cv2_image_from_base64_string(b64str):
     encoded_data = b64str.split(',')[1]
