@@ -15,6 +15,11 @@ import tensorflow as tf
 
 app = Flask(__name__)
 cors = CORS(app)
+cors = CORS(app, resource={
+    r"/*":{
+        "origins":"*"
+    }
+})
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # model = pickle.load(open("brain_tumor_model.pkl", "rb"))
