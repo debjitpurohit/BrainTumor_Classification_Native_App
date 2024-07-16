@@ -1,4 +1,3 @@
-os
 Flask
 flask-cors
 gunicorn
