@@ -28,7 +28,7 @@ loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
 # load weights into new model
-loaded_model.load_weights("./braintumor.h5")
+# loaded_model.load_weights("./braintumor.h5")
 
 
 def get_cv2_image_from_base64_string(b64str):
