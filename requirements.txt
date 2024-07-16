@@ -14,4 +14,3 @@ uvicorn
 pybase64
 typing
 pydantic
-os
