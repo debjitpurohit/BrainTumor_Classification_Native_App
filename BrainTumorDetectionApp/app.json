@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "BrainTumorDetection",
+    "slug": "BrainTumorDetection",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/m.jpg",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "black"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.debjit2001.BrainTumorDetection"
+    },
+    "web": {
+      "favicon": "./assets/m.jpg"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "970c6574-eeca-420c-94c7-1adf949cd77e"
+      }
+    }
+  }
+}
