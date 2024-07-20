@@ -1,6 +1,6 @@
 # use fast api taking string as parameter from a get function and converting it to image and then to numpy array and then to a dataframe and then to a prediction and then to a json file and then to a string and then to a response
 from flask import Flask, json, request
-from tensorflow.python.keras.models import model_from_json
+from tensorflow.keras.models import load_model
 from flask_cors import CORS, cross_origin
 import numpy as np
 import pandas as pd
@@ -22,43 +22,52 @@ cors = CORS(app, resource={
     }
 })
 app.config['CORS_HEADERS'] = 'Content-Type'
-
+######################################################################
 # model = pickle.load(open("brain_tumor_model.pkl", "rb"))
 # json_file = open('./braintumormodel.json', 'r')
 # loaded_model_json = json_file.read()
 # json_file.close()
-# loaded_model = model_from_json(loaded_model_json)
+# loaded_model = model_from_json(loded_model_json)
 # # load weights into new model
-# loaded_model.load_weights("./braintumormodel.h5")
-###############################################################
-json_path = './braintumormodel.json'
-weights_path = './braintumor.h5'
+# loaded_model.load_weights("./braintumor.h5")
 
-if not os.path.exists(json_path):
-    raise FileNotFoundError(f"JSON file not found: {json_path}")
+######################################################################
+# json_path = './braintumormodel.json'
+# weights_path = './braintumor.h5'
 
-if not os.path.exists(weights_path):
-    raise FileNotFoundError(f"H5 file not found: {weights_path}")
+# if not os.path.exists(json_path):
+#     raise FileNotFoundError(f"JSON file not found: {json_path}")
 
-# Load JSON and create model
-with open(json_path, 'r') as json_file:
-    loaded_model_json = json_file.read()
+# if not os.path.exists(weights_path):
+#     raise FileNotFoundError(f"H5 file not found: {weights_path}")
 
-# Check if JSON content is not empty
-if not loaded_model_json:
-    raise ValueError("The JSON file is empty or could not be read properly.")
+# # Load JSON and create model
+# with open(json_path, 'r') as json_file:
+#     loaded_model_json = json_file.read()
 
-# Create the model from JSON
-loaded_model = model_from_json(loaded_model_json)
+# # Check if JSON content is not empty
+# if not loaded_model_json:
+#     raise ValueError("The JSON file is empty or could not be read properly.")
 
-# Load weights into the new model
-loaded_model.load_weights(weights_path)
+# # Create the model from JSON
+# loaded_model = model_from_json(loaded_model_json)
 
+# # Load weights into the new model
+# loaded_model.load_weights(weights_path)
+
+# print("Model loaded successfully.")
+
+
+
+####################################################################
+weights_path = './braintumorfile.h5'
+loaded_model = load_model(weights_path)
 print("Model loaded successfully.")
 
 
 
-#################################################################
+######################################################################
+
 def get_cv2_image_from_base64_string(b64str):
     encoded_data = b64str.split(',')[1]
     nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
@@ -78,28 +87,27 @@ def home():
 labels = ['glioma_tumor','meningioma_tumor','no_tumor','pituitary_tumor']
 @app.route("/", methods=['POST'])
 def read_root():
-    data = request.get_json()
-    # data = json.loads(data2)
+    data = json.loads(request.data)
     predict_img = []
     for item in data['image']:
         #Decode the base64-encoded image
-        # image = get_image_from_base64_string(item)
-        # image2 = cv2.resize(image,(150,150))
-        # predict_img.append(image)
-        encoded_data = item.split(',')[1]
-        image_data = BytesIO(base64.b64decode(encoded_data))
-        pil_image = Image.open(image_data)
+        image = get_cv2_image_from_base64_string(item)
+        image = cv2.resize(image,(150,150))
+        predict_img.append(image)
+        # encoded_data = item.split(',')[1]
+        # image_data = BytesIO(base64.b64decode(encoded_data))
+        # pil_image = Image.open(image_data)
         # # Resize the image to 224x224
-        resized_image = pil_image.resize((150, 150))
+        # resized_image = pil_image.resize((224, 224))
         # # Append the resized image to the list
-        predict_img.append(resized_image)
+        # predict_img.append(resized_image)
 
     # np_images = np.array([np.array(img) for img in predict_img])
     # # Convert the NumPy array to a TensorFlow tensor
     # tf_images = tf.convert_to_tensor(np_images, dtype=tf.float32)
     # # # Convert the image to a numpy array
     img_array = np.array(predict_img)
-    # img_array2 = img_array.reshape(1,150,150,3)
+    img_array = img_array.reshape(1,150,150,3)
     prediction = loaded_model.predict(img_array)
     result = prediction.argmax()
 
