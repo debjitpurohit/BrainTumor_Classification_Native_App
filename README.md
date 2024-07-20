@@ -1,3 +1,4 @@
+### PYTHON_VERSION - 3.10.2
 ## Starting Backend
    1) python app.py
 ## starting Frontend
