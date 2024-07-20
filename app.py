@@ -1,6 +1,6 @@
 # use fast api taking string as parameter from a get function and converting it to image and then to numpy array and then to a dataframe and then to a prediction and then to a json file and then to a string and then to a response
 from flask import Flask, json, request
-from tensorflow.keras.models import model_from_json
+from tensorflow.keras.models import load_model
 from flask_cors import CORS, cross_origin
 import numpy as np
 import pandas as pd
@@ -32,34 +32,41 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 # loaded_model.load_weights("./braintumor.h5")
 
 ######################################################################
-json_path = './braintumormodel.json'
-weights_path = './braintumor.h5'
+# json_path = './braintumormodel.json'
+# weights_path = './braintumor.h5'
 
-if not os.path.exists(json_path):
-    raise FileNotFoundError(f"JSON file not found: {json_path}")
+# if not os.path.exists(json_path):
+#     raise FileNotFoundError(f"JSON file not found: {json_path}")
 
-if not os.path.exists(weights_path):
-    raise FileNotFoundError(f"H5 file not found: {weights_path}")
+# if not os.path.exists(weights_path):
+#     raise FileNotFoundError(f"H5 file not found: {weights_path}")
 
-# Load JSON and create model
-with open(json_path, 'r') as json_file:
-    loaded_model_json = json_file.read()
+# # Load JSON and create model
+# with open(json_path, 'r') as json_file:
+#     loaded_model_json = json_file.read()
 
-# Check if JSON content is not empty
-if not loaded_model_json:
-    raise ValueError("The JSON file is empty or could not be read properly.")
+# # Check if JSON content is not empty
+# if not loaded_model_json:
+#     raise ValueError("The JSON file is empty or could not be read properly.")
 
-# Create the model from JSON
-loaded_model = model_from_json(loaded_model_json)
+# # Create the model from JSON
+# loaded_model = model_from_json(loaded_model_json)
 
-# Load weights into the new model
-loaded_model.load_weights(weights_path)
+# # Load weights into the new model
+# loaded_model.load_weights(weights_path)
 
-print("Model loaded successfully.")
+# print("Model loaded successfully.")
 
 
 
 ####################################################################
+weights_path = './braintumorfile.h5'
+loaded_model = load_model(weights_path)
+print("Model loaded successfully.")
+
+
+
+######################################################################
 
 def get_cv2_image_from_base64_string(b64str):
     encoded_data = b64str.split(',')[1]
